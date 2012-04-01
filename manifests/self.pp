@@ -6,7 +6,7 @@ import "nginx.pp"
 File { # defaults
   owner => root,
   group => root,
-  mode => 0600,
+  mode => 0644,
 }
 
 package { ['php5-fpm', 'php-pear', 'php5-common', 'php5-mysql', 'php-apc']:
@@ -45,4 +45,10 @@ mysql::db { 'wordpress':
   user => 'wp_user',
   password => $WORDPRESS_DB_PASSWORD,
   require => Class["Mysql::Server"],
+}
+
+$wordpress_db_password = $WORDPRESS_DB_PASSWORD
+file { 'wp-config.php':
+  path => "/var/www/wp-config.php",
+  content => template("/etc/puppet/templates/wp-config.php.erb", "/etc/puppet/templates/wp-config-keys.php.erb"),
 }
