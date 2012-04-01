@@ -47,8 +47,36 @@ mysql::db { 'wordpress':
   require => Class["Mysql::Server"],
 }
 
-$wordpress_db_password = $WORDPRESS_DB_PASSWORD
-file { 'wp-config.php':
-  path => "/var/www/wp-config.php",
-  content => template("/etc/puppet/templates/wp-config.php.erb", "/etc/puppet/templates/wp-config-keys.php.erb"),
+class wordpress {
+  exec { 'getlatest':
+    refreshonly => true,
+    creates => "/tmp/latest.tar.gz",
+    command => "/usr/bin/curl -O http://wordpress.org/latest.tar.gz",
+  }
+  exec { 'extract': 
+    cwd => "/var/www",
+    command => "/bin/tar xf /tmp/latest.tar.gz --strip-components=1",
+    creates => "/var/www/wp-content",
+    require => File['/var/www'], 
+    subscribe => Exec['getlatest'],
+  }
+  exec { 'fixown':
+    refreshonly => true,
+    command => "/bin/chown -R www-data:www-data /var/www",
+    notify => Exec['fixperm'],
+  }
+  exec { 'fixperm':
+    refreshonly => true,
+    command => "/bin/chmod -R a+rX /var/www",
+  }
+  $wordpress_db_password = $WORDPRESS_DB_PASSWORD
+  file { 'wp-config.php':
+    path => "/var/www/wp-config.php",
+    content => template("/etc/puppet/templates/wp-config.php.erb", "/etc/puppet/templates/wp-config-keys.php.erb"),
+    owner => 'www-data',
+    group => 'www-data',
+    require => File['/var/www'],
+  }
 }
+
+include wordpress
