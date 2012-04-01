@@ -1,4 +1,10 @@
-To install an EC2 micro server configured to serve [10 Million hits per day with WordPress on a $15 virtual server][EL2012] but without quite as much manual work:
+## Disclaimer
+
+This is a work in progress. Right now, it doesn't work. All help appreciated. 
+
+## Goal
+
+To install an EC2 micro server configured to serve [10 Million hits per day with WordPress on a $15 virtual server][EL2012] but without quite as much manual work.
 
 * Sign up for EC2
 * Install EC2 API tools
@@ -7,7 +13,7 @@ To install an EC2 micro server configured to serve [10 Million hits per day with
 * Install Puppet and Git
 * Configure your puppet
 
-For more detail, see Installation tomorrow. (Sadly, GitHub's Markdown lacks internal anchors.)
+For more detail, see Installation below. (Sadly, GitHub's Markdown lacks internal anchors.)
 
 ## TODO
 
