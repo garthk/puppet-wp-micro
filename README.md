@@ -1,6 +1,21 @@
-I `/blame @ewantoo` for [10 Million hits per day with WordPress on a $15 virtual server][EL2012]. 
+To install an EC2 micro server configured to serve [10 Million hits per day with WordPress on a $15 virtual server][EL2012]:
 
-Steps included:
+* [Sign up for EC2]
+* [Install EC2 API tools]
+* [Create your Micro server]
+* [Log in and update]
+* [Install Puppet and Git]
+* [Configure your puppet]
+
+## TODO
+
+* Fix the WordPress installation
+* Finish replicating Ewan's work (current step: "Run a blitz.io test to see how we’re doing")
+* Make more manifest-ey so people can make many puppets, install >1 sites on one host, etc
+
+## Installation
+
+#### Sign up for EC2
 
 * [Sign up for EC2]
 
@@ -16,7 +31,9 @@ Steps included:
 
      `find ~/Downloads -type f | egrep ".*/(cert|pk)-[A-Z0-9]{32}.pem" | xargs -I{} mv {} ~/.ec2/`
 
-* [Install Homebrew]. If you're not on a Mac, you can't do this. Find another way to install the EC2 API tools and skip a few steps. 
+### Install EC2 API tools
+
+* [Install Homebrew]. If you're not on a Mac, you can't do this. Find another way to install the EC2 API tools and skip a few steps.
 
 * `brew install ec2-api-tools`
 
@@ -32,7 +49,7 @@ Steps included:
 
   Note that the `EC2_PRIVATE_KEY` and `EC2_CERT` lines will cause commands to fail if you have more than one matching file. Tip: don't. 
 
-### After Installing EC2 API tools:
+### Create your Micro server
 
 * look for a 32-bit t1.micro [oneirc image] in your preferred region, and note its AMI, e.g. `ami-ac05889c` for `us-west-2`. 
 
@@ -51,11 +68,11 @@ Steps included:
 
         export EC2_URL=https://$(ec2-describe-regions | grep $REGION | cut -f 3)
         
-  I'll assume you've done so from now on. 
+    I'll assume you've done so from now on. 
 
 * Use `ec2-describe-instances` to watch your instance boot. The output format is diabolical: a run of tab-separated values. Look for `running`, which for me turned up in column 6. Then note the group (probably `default`, perhaps in column 30) and hostname (`ec2-$DASHED_IP-$REGION.compute.amazonaws.com`, perhaps in column 4).
 
-  Assuming your columns match:
+    Assuming your columns match:
   
         export $HOSTNAME=`ec2-describe-instances|grep $AMI|grep $INSTANCE|cut -f 4`
 
@@ -64,24 +81,43 @@ Steps included:
         ec2-authorize default -p 22
         ec2-authorize default -p 80
 
-  The default Ubuntu instance lacks anything on port 80, so that second line is safe — especially as we're about to…
+    The default Ubuntu instance lacks anything on port 80, so that second line is safe — especially as we're about to…
   
+### Log in and update
+
 * SSH in and apply updates right away. First, connect:
 
         ssh -i $REGION.pem ubuntu@$HOSTNAME
         
-  Then, on the host: 
+    Then, on the host: 
   
         sudo -i
         set -o emacs # else go insane
         apt-get update
         apt-get dist-upgrade
 
+### Install Puppet and Git
+
 * Still as `root`, install [Puppet], which is like CSS but which describes server configuration rather than element rendering:
 
-        apt-get install puppet
+        apt-get install puppet git-core
         
-* Perform magic (TBA).
+### Configure your puppet
+
+* Still as `root`, replace your node's Puppet configuration with `git clone`:
+
+        cd /etc/puppet
+        rm -rf * # eek!
+        git clone git://github.com/garthk/puppet-wp-micro.git
+
+* Secure your clone by changing the shipped passwords and other keys:
+
+        curl https://api.wordpress.org/secret-key/1.1/salt/ > templates/wp-config-keys.php.erb
+        vim manifests/passwords.pp
+
+* Finally, apply the configuration. Puppet will install and build everything else:
+
+        puppet apply manifests/self.pp
 
 [EL2012]: http://www.ewanleith.com/blog/900/10-million-hits-a-day-with-wordpress-using-a-15-server
 [Install Homebrew]: https://github.com/mxcl/homebrew/wiki/installation
