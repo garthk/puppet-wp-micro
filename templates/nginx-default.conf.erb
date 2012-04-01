@@ -2,7 +2,7 @@
 # Managed as: /etc/puppet/templates/nginx-default.conf.erb
 server {
   ## Your website name goes here.
-  server_name <%=domain%> www.<%=domain%>;
+  server_name <%=nginx_domain%> www.<%=nginx_domain%>;
   ## Your only path reference.
   root /var/www/;
   listen 80;
@@ -57,7 +57,7 @@ server {
   if ($query_string != "") {
     set $w3tc_rewrite 0;
   }
-  if ($http_host !~ "<%=domain%>") {
+  if ($http_host !~ "<%=nginx_domain%>") {
     set $w3tc_rewrite 0;
   }
   set $w3tc_rewrite3 1;

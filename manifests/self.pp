@@ -37,6 +37,8 @@ chdir = /",
 
 $mysql_password = $MYSQL_ROOT_PASSWORD
 include mysql::server
+
+$nginx_domain = "ec2-50-112-42-160.us-west-2.compute.amazonaws.com"
 include nginx
 
 mysql::db { 'wordpress':
