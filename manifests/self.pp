@@ -72,7 +72,7 @@ class wordpress {
   $wordpress_db_password = $WORDPRESS_DB_PASSWORD
   file { 'wp-config.php':
     path => "/var/www/wp-config.php",
-    content => template("/etc/puppet/templates/wp-config.php.erb", "/etc/puppet/templates/wp-config-keys.php.erb"),
+    content => template("/etc/puppet/templates/wp-config.php.erb", "/etc/puppet/templates/wp-config-keys.php.erb", "/etc/puppet/templates/wp-config-end.php.erb"),
     owner => 'www-data',
     group => 'www-data',
     require => File['/var/www'],
