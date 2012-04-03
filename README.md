@@ -1,6 +1,6 @@
 ## Disclaimer
 
-This is a work in progress. Right now, it doesn't work. All help appreciated. 
+This is a work in progress. All help appreciated. 
 
 ## Goal
 
@@ -17,9 +17,7 @@ For more detail, see Installation below. (Sadly, GitHub's Markdown lacks interna
 
 ## TODO
 
-* Fix the WordPress installation. **RIGHT NOW, IT DOESN'T WORK.**
 * Finish replicating Ewan's work (current step: "Run a blitz.io test to see how we’re doing")
-* Make more manifest-ey so people can make many puppets, install multiple sites on one host, etc.
 
 ## Installation
 
@@ -112,11 +110,11 @@ For more detail, see Installation below. (Sadly, GitHub's Markdown lacks interna
         
 ### Configure your puppet
 
-* Still as `root`, replace your node's Puppet configuration with `git clone`:
+* Still as `root`, install the module:
 
-        cd /etc/puppet
-        rm -rf * # eek!
+        cd /etc/puppet/modules
         git clone git://github.com/garthk/puppet-wp-micro.git
+        ln -s puppet-wp-micro wp_micro
 
 * Secure your clone by changing the shipped passwords and other keys:
 

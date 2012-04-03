@@ -5,7 +5,7 @@ class python_software_properties {
   }
 }
 
-define ppa($user, $package) {
+define wp_micro::ppa($user, $package) {
   include python_software_properties
   $slashed="${user}/${package}"
   $dashed="${user}-${package}"
