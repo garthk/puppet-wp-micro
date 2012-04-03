@@ -18,6 +18,8 @@ For more detail, see Installation below. (Sadly, GitHub's Markdown lacks interna
 ## TODO
 
 * Finish replicating Ewan's work (current step: "Run a blitz.io test to see how we’re doing")
+* Fix the security again. 
+* Fix the CSS when not on the admin page.
 
 ## Installation
 
@@ -116,14 +118,9 @@ For more detail, see Installation below. (Sadly, GitHub's Markdown lacks interna
         git clone git://github.com/garthk/puppet-wp-micro.git
         ln -s puppet-wp-micro wp_micro
 
-* Secure your clone by changing the shipped passwords and other keys:
+* Write your own `self.pp` file based on `tests/vagrant.pp`.
 
-        curl https://api.wordpress.org/secret-key/1.1/salt/ > templates/wp-config-keys.php.erb
-        vim manifests/passwords.pp
-
-* Finally, apply the configuration. Puppet will install and build everything else:
-
-        puppet apply manifests/self.pp
+* `puppet apply self.pp`
 
 [EL2012]: http://www.ewanleith.com/blog/900/10-million-hits-a-day-with-wordpress-using-a-15-server
 [Install Homebrew]: https://github.com/mxcl/homebrew/wiki/installation
