@@ -39,7 +39,7 @@ For more detail, see Installation below. (Sadly, GitHub's Markdown lacks interna
 
 ## Installation
 
-#### Sign up for EC2
+### Sign up for EC2
 
 * [Sign up for EC2]
 
@@ -57,7 +57,19 @@ For more detail, see Installation below. (Sadly, GitHub's Markdown lacks interna
 
 ### Install EC2 API tools
 
-* [Install Homebrew]. If you're not on a Mac, you can't do this. Find another way to install the EC2 API tools and skip a few steps.
+#### Windows:
+
+* Good luck!
+
+#### Linux:
+
+* Try these instructions on [Installing the Amazon EC2 Command Line Tools] from Bottomless, Inc.
+
+[Installing the Amazon EC2 Command Line Tools]: http://blog.bottomlessinc.com/2010/12/installing-the-amazon-ec2-command-line-tools-to-launch-persistent-instances/
+
+#### Mac:
+
+* [Install Homebrew].
 
 * `brew install ec2-api-tools`
 
@@ -71,7 +83,7 @@ For more detail, see Installation below. (Sadly, GitHub's Markdown lacks interna
         export JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Home/
         export PATH=$EC2_HOME/bin
 
-  Note that the `EC2_PRIVATE_KEY` and `EC2_CERT` lines will cause commands to fail if you have more than one matching file. Tip: don't. 
+    **WARNING:** the `EC2_PRIVATE_KEY` and `EC2_CERT` lines will cause commands to fail if you have more than one matching file. If so, pick one key pair and set the variables to their file names.
 
 ### Create your Micro server
 
@@ -128,11 +140,11 @@ For more detail, see Installation below. (Sadly, GitHub's Markdown lacks interna
         
 ### Configure your puppet
 
-* Still as `root`, install the module:
+* Still as `root`, install the module and change its cookie keys:
 
         cd /etc/puppet/modules
-        git clone git://github.com/garthk/puppet-wp-micro.git
-        ln -s puppet-wp-micro wp_micro
+        git clone git://github.com/garthk/puppet-wp-micro.git wp_micro
+        curl https://api.wordpress.org/secret-key/1.1/salt/ > wp_micro/templates/wp-config-keys.php.erb
 
 * Write your own `self.pp` file based on `tests/vagrant.pp`.
 
@@ -152,4 +164,3 @@ References:
 
 * Robert Sosinski's [Starting Amazon EC2 with Mac OS X][RS2008]
 * Ewan Leith's [10 Million hits per day with WordPress on a $15 virtual server][EL2012]
-
