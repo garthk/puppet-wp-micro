@@ -37,8 +37,7 @@ rfc3442-classless-static-routes, ntp-servers;',
 
   class { 'wp_micro':
     stage          => main,
-    domain         => "localhost",
-    port           => 4567,
+    domain         => "fortythree.local",
     mysql_password => 'kdjfhskjh',
     db_password    => 'lksgjshfg',
   }

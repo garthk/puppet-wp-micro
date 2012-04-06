@@ -15,11 +15,27 @@ To install an EC2 micro server configured to serve [10 Million hits per day with
 
 For more detail, see Installation below. (Sadly, GitHub's Markdown lacks internal anchors.)
 
+## Testing in Vagrant
+
+* Install [Vagrant](http://vagrantup.com)
+
+* Edit your `/etc/hosts` file (`%WINDOWS%\system32\drivers\etc\hosts` on Windows) to include:
+
+    `192.168.31.43   fortythree.local fortythree`
+
+* Build the virtual machine:
+
+    `make vm` -- on Linux or Mac OS X   
+    `vagrant up` -- on Windows, Linux, or Mac OS X
+
+* Browse to `http://fortythree.local/`
+* Configure and play with WordPress
+
 ## TODO
 
 * Finish replicating Ewan's work (current step: "Run a blitz.io test to see how we’re doing")
 * Fix the security again. 
-* Fix the CSS when not on the admin page.
+* Fix the CSS when not on the admin page when `port` is set. 
 
 ## Installation
 
